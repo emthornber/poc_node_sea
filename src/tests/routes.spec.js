@@ -7,7 +7,7 @@ const rewire = require('rewire');
 const request = require('supertest');
 
 const healthCheckController = require('../controllers/health.controller');
-const itemController = require('../controllers/item.controller');
+const todoController = require('../controllers/todo.controller');
 
 const sandbox = sinon.createSandbox();
 
@@ -46,59 +46,59 @@ describe('Testing express app routes', () => {
   });
 
 
-  describe('Testing /item route', () => {
-    let sampleItemVal, hash;
+  describe('Testing /todo route', () => {
+    let sampletodoVal, hash;
 
     beforeEach(() => {
       hash = '1234567891';
-      sampleItemVal = {
-        name: 'sample item',
+      sampletodoVal = {
+        name: 'sample todo',
         price: 10,
         rating: "5",
         hash
       };
-      sandbox.stub(itemController, 'readItem').resolves(sampleItemVal);
-      sandbox.stub(itemController, 'createItem').resolves(sampleItemVal);
-      sandbox.stub(itemController, 'updateItemHash').resolves(sampleItemVal);
+      sandbox.stub(todoController, 'readtodo').resolves(sampletodoVal);
+      sandbox.stub(todoController, 'createtodo').resolves(sampletodoVal);
+      sandbox.stub(todoController, 'updatetodoHash').resolves(sampletodoVal);
     });
 
-    it('GET /:hash should successfully return item', (done) => {
-      request(app).get(`/item/${hash}`)
+    it('GET /:hash should successfully return todo', (done) => {
+      request(app).get(`/todo/${hash}`)
         .expect(200)
         .end((err, response) => {
-          expect(response.body).to.have.property('message').to.equal('Item read successfully!');
-          expect(response.body).to.have.property('item').to.have.property('name').to.equal('sample item');
-          expect(response.body).to.have.property('item').to.have.property('price').to.equal(10);
-          expect(response.body).to.have.property('item').to.have.property('rating').to.equal('5');
-          expect(response.body).to.have.property('item').to.have.property('hash').to.equal(hash);
+          expect(response.body).to.have.property('message').to.equal('todo read successfully!');
+          expect(response.body).to.have.property('todo').to.have.property('name').to.equal('sample todo');
+          expect(response.body).to.have.property('todo').to.have.property('price').to.equal(10);
+          expect(response.body).to.have.property('todo').to.have.property('rating').to.equal('5');
+          expect(response.body).to.have.property('todo').to.have.property('hash').to.equal(hash);
           done(err); // err is null in success scenario
         });
     });
 
-    it('POST / should successfully create a new item', (done) => {
-      request(app).post('/item/')
-        .send(sampleItemVal)
+    it('POST / should successfully create a new todo', (done) => {
+      request(app).post('/todo/')
+        .send(sampletodoVal)
         .expect(200)
         .end((err, response) => {
-          expect(response.body).to.have.property('message').to.equal('Item created successfully!');
-          expect(response.body).to.have.property('item').to.have.property('name').to.equal('sample item');
-          expect(response.body).to.have.property('item').to.have.property('price').to.equal(10);
-          expect(response.body).to.have.property('item').to.have.property('rating').to.equal('5');
-          expect(response.body).to.have.property('item').to.have.property('hash').to.equal(hash);
+          expect(response.body).to.have.property('message').to.equal('todo created successfully!');
+          expect(response.body).to.have.property('todo').to.have.property('name').to.equal('sample todo');
+          expect(response.body).to.have.property('todo').to.have.property('price').to.equal(10);
+          expect(response.body).to.have.property('todo').to.have.property('rating').to.equal('5');
+          expect(response.body).to.have.property('todo').to.have.property('hash').to.equal(hash);
           done(err);
         });
     });
 
-    it('PUT / should successfully update hash for a given item', (done) => {
-      request(app).put('/item')
+    it('PUT / should successfully update hash for a given todo', (done) => {
+      request(app).put('/todo')
         .send(hash)
         .expect(200)
         .end((err, response) => {
-          expect(response.body).to.have.property('message').to.equal('Item updated successfully!');
-          expect(response.body).to.have.property('item').to.have.property('name').to.equal('sample item');
-          expect(response.body).to.have.property('item').to.have.property('price').to.equal(10);
-          expect(response.body).to.have.property('item').to.have.property('rating').to.equal('5');
-          expect(response.body).to.have.property('item').to.have.property('hash').to.equal(hash);
+          expect(response.body).to.have.property('message').to.equal('todo updated successfully!');
+          expect(response.body).to.have.property('todo').to.have.property('name').to.equal('sample todo');
+          expect(response.body).to.have.property('todo').to.have.property('price').to.equal(10);
+          expect(response.body).to.have.property('todo').to.have.property('rating').to.equal('5');
+          expect(response.body).to.have.property('todo').to.have.property('hash').to.equal(hash);
           done(err);
         });
     });

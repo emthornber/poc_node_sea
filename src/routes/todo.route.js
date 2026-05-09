@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const itemController = require('../controllers/item.controller');
+const todoController = require('../controllers/todo.controller');
 
 router.get('/:hash', async (req, res) => {
   try {
@@ -9,17 +9,17 @@ router.get('/:hash', async (req, res) => {
       hash
     } = req.params;
 
-    const item = await itemController.readItem(hash);
+    const todo = await todoController.readtodo(hash);
     res.json({
-      item,
+      todo,
       status: 200,
-      message: 'Item read successfully!'
+      message: 'todo read successfully!'
     });
   } catch (err) {
     res.json({
-      item: null,
+      todo: null,
       status: err.code || err.statusCode || 500,
-      message: err.message || 'Something went wrong while reading item from DB!'
+      message: err.message || 'Something went wrong while reading todo from DB!'
     });
   }
 });
@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
       hash
     } = req.body;
 
-    const item = await itemController.createItem({
+    const todo = await todoController.createtodo({
       name,
       rating,
       price,
@@ -41,15 +41,15 @@ router.post('/', async (req, res) => {
     });
 
     res.json({
-      item,
+      todo,
       status: 200,
-      message: 'Item created successfully!'
+      message: 'todo created successfully!'
     })
   } catch (err) {
     res.json({
-      item: null,
+      todo: null,
       status: err.code || err.statusCode || 500,
-      message: err.message || 'Something went wrong while creating new item!'
+      message: err.message || 'Something went wrong while creating new todo!'
     });
   }
 });
@@ -60,17 +60,17 @@ router.put('/', async (req, res) => {
       hash
     } = req.body;
 
-    const item = await itemController.updateItemHash(hash);
+    const todo = await todoController.updatetodoHash(hash);
     res.json({
-      item,
+      todo,
       status: 200,
-      message: 'Item updated successfully!'
+      message: 'todo updated successfully!'
     });
   } catch (err) {
     res.json({
-      item: null,
+      todo: null,
       status: err.code || err.statusCode || 500,
-      message: err.message || 'Something went wrong while updating item hash!'
+      message: err.message || 'Something went wrong while updating todo hash!'
     });
   }
 });

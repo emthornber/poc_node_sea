@@ -1,11 +1,11 @@
-const Item = require('../models/Item.model');
+const todo = require('../models/todo.model');
 const {
   nanoid
 } = require('nanoid');
 
-exports.createItem = async function (itemObj) {
+exports.createtodo = async function (todoObj) {
   try {
-    if (!itemObj || !itemObj.name || !itemObj.rating || !itemObj.price || !itemObj.hash) {
+    if (!todoObj || !todoObj.name || !todoObj.rating || !todoObj.price || !todoObj.hash) {
       throw new Error('Invalid arguments');
     }
     const {
@@ -13,45 +13,45 @@ exports.createItem = async function (itemObj) {
       rating,
       price,
       hash
-    } = itemObj;
+    } = todoObj;
 
-    let item = new Item({
+    let todo = new todo({
       name,
       rating,
       price,
       hash
     });
 
-    return await item.save();
+    return await todo.save();
   } catch (err) {
     return Promise.reject(err);
   }
 }
 
-exports.updateItemHash = async function (hash) {
+exports.updatetodoHash = async function (hash) {
   try {
     if (!hash) {
       throw new Error('Incomplete arguments');
     }
 
-    let item = await Item.findOne({
+    let todo = await todo.findOne({
       hash
     });
-    item.hash = getUniqueHash(item);
+    todo.hash = getUniqueHash(todo);
 
-    return await item.save();
+    return await todo.save();
   } catch (err) {
     return Promise.reject(err);
   }
 }
 
-exports.readItem = async function (hash) {
+exports.readtodo = async function (hash) {
   try {
     if (!hash) {
-      throw new Error('Invalid item id');
+      throw new Error('Invalid todo id');
     }
 
-    return await Item.findOne({
+    return await todo.findOne({
       hash
     });
   } catch (err) {
@@ -61,9 +61,9 @@ exports.readItem = async function (hash) {
 
 
 // Private function
-function getUniqueHash(item) {
-  if (!item) return null;
-  const currentHash = item.hash;
+function getUniqueHash(todo) {
+  if (!todo) return null;
+  const currentHash = todo.hash;
   let newHash = nanoid(10);
 
   while (newHash === currentHash) {

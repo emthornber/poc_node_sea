@@ -1,7 +1,7 @@
-const itemRoutes = require('./item.route');
+const todoRoutes = require('./todo.route');
 const healthCheckRoutes = require('./health.route');
 
 module.exports = {
-  itemRoutes,
+  todoRoutes,
   healthCheckRoutes
 };

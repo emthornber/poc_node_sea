@@ -11,45 +11,45 @@ const mongoose = require('mongoose');
 
 const sandbox = sinon.createSandbox();
 
-let itemController = rewire('../controllers/item.controller');
+let todoController = rewire('../controllers/todo.controller');
 
-describe('Testing /item endpoint', () => {
-  let sampleItemVal;
+describe('Testing /todo endpoint', () => {
+  let sampletodoVal;
   let findOneStub;
   const sampleUniqueHash = '1234567891';
 
   beforeEach(() => {
-    sampleItemVal = {
-      name: 'sample item',
+    sampletodoVal = {
+      name: 'sample todo',
       price: 10,
       rating: "5",
       hash: sampleUniqueHash
     };
 
-    findOneStub = sandbox.stub(mongoose.Model, 'findOne').resolves(sampleItemVal);
+    findOneStub = sandbox.stub(mongoose.Model, 'findOne').resolves(sampletodoVal);
   });
 
   afterEach(() => {
-    itemController = rewire('../controllers/item.controller');
+    todoController = rewire('../controllers/todo.controller');
     sandbox.restore();
   });
 
   describe('GET /:hash', () => {
     it('should return error when called without hash', async () => {
-      itemController.readItem()
+      todoController.readtodo()
         .then(() => {
           throw new Error('⚠️ Unexpected success!');
         })
         .catch((err) => {
           expect(result).to.be.instanceOf(Error);
-          expect(err.message).to.equal('Invalid item id');
+          expect(err.message).to.equal('Invalid todo id');
         })
     });
 
     it('should succeed when called with hash', async () => {
-      itemController.readItem('someRandomHash')
-        .then((item) => {
-          expect(item).to.equal(sampleItemVal);
+      todoController.readtodo('someRandomHash')
+        .then((todo) => {
+          expect(todo).to.equal(sampletodoVal);
         })
         .catch((err) => {
           throw new Error('⚠️ Unexpected failure!');
@@ -58,7 +58,7 @@ describe('Testing /item endpoint', () => {
   });
 
   describe('PUT /', () => {
-    let getUniqueHashStub, saveStub, result, sampleUpdatedItemVal;
+    let getUniqueHashStub, saveStub, result, sampleUpdatedtodoVal;
     const sampleUpdatedHash = '9876543219';
 
     beforeEach(async () => {
@@ -68,25 +68,25 @@ describe('Testing /item endpoint', () => {
       // Stub to mock getUniqueHash's Functionality
       getUniqueHashStub = sandbox.stub().returns(sampleUpdatedHash);
 
-      sampleUpdatedItemVal = {
-        ...sampleItemVal,
+      sampleUpdatedtodoVal = {
+        ...sampletodoVal,
         hash: sampleUpdatedHash
       };
-      // save stub to return updated item
-      saveStub = sandbox.stub().returns(sampleUpdatedItemVal);
+      // save stub to return updated todo
+      saveStub = sandbox.stub().returns(sampleUpdatedtodoVal);
 
-      // make findOneStub return save() method in addition to sampleItemVal
+      // make findOneStub return save() method in addition to sampletodoVal
       findOneStub = sandbox.stub(mongoose.Model, 'findOne').resolves({
-        ...sampleItemVal,
+        ...sampletodoVal,
         save: saveStub
       });
 
-      // Use rewire to modify itemController's private method getUniqueHash
-      itemController.__set__('getUniqueHash', getUniqueHashStub);
+      // Use rewire to modify todoController's private method getUniqueHash
+      todoController.__set__('getUniqueHash', getUniqueHashStub);
     });
 
     it('should throw invalid argument error', () => {
-      itemController.updateItemHash()
+      todoController.updatetodoHash()
         .then(() => {
           throw new Error('⚠️ Unexpected success!');
         })
@@ -96,31 +96,31 @@ describe('Testing /item endpoint', () => {
         })
     });
 
-    it('should update item hash successfully', async () => {
-      result = await itemController.updateItemHash(sampleUniqueHash);
+    it('should update todo hash successfully', async () => {
+      result = await todoController.updatetodoHash(sampleUniqueHash);
       expect(findOneStub).to.have.been.calledWith({
         hash: sampleUniqueHash
       });
       expect(findOneStub).to.have.been.calledOnce;
       expect(saveStub).to.have.been.calledOnce;
-      expect(result).to.equal(sampleUpdatedItemVal);
+      expect(result).to.equal(sampleUpdatedtodoVal);
     });
   });
 
   describe('POST /', () => {
-    let itemModelStub, saveStub, result;
+    let todoModelStub, saveStub, result;
 
     beforeEach(async () => {
-      saveStub = sandbox.stub().returns(sampleItemVal);
-      itemModelStub = sandbox.stub().returns({
+      saveStub = sandbox.stub().returns(sampletodoVal);
+      todoModelStub = sandbox.stub().returns({
         save: saveStub
       });
 
-      itemController.__set__('Item', itemModelStub);
+      todoController.__set__('todo', todoModelStub);
     });
 
     it('should throw invalid argument error', () => {
-      itemController.createItem()
+      todoController.createtodo()
         .then(() => {
           throw new Error('⚠️ Unexpected success!');
         })
@@ -130,12 +130,12 @@ describe('Testing /item endpoint', () => {
         })
     });
 
-    it('should create item successfully', async () => {
-      result = await itemController.createItem(sampleItemVal);
-      expect(itemModelStub).to.have.been.calledWithNew;
-      expect(itemModelStub).to.have.been.calledWith(sampleItemVal);
+    it('should create todo successfully', async () => {
+      result = await todoController.createtodo(sampletodoVal);
+      expect(todoModelStub).to.have.been.calledWithNew;
+      expect(todoModelStub).to.have.been.calledWith(sampletodoVal);
       expect(saveStub).to.have.been.called;
-      expect(result).to.equal(sampleItemVal);
+      expect(result).to.equal(sampletodoVal);
     });
   });
 });

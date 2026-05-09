@@ -1,6 +1,6 @@
 {
-  "name": "express-api-unit-test-starter",
-  "version": "1.0.0",
+  "name": "poc_node_sea",
+  "version": "0.1.0",
   "description": "Boilerplate express + mongoose API with unit test setup (mocha, chai, supertest, rewire, sinon)",
   "main": "index.js",
   "scripts": {
@@ -12,18 +12,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Rishabh570/express-api-unit-test-starter.git"
+    "url": "git+https://github.com/emthornber/poc_node_sea.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Rishabh570/express-api-unit-test-starter/issues"
+    "url": "https://github.com/emthornber/poc_node_sea/issues"
   },
-  "homepage": "https://github.com/Rishabh570/express-api-unit-test-starter#readme",
+  "homepage": "https://github.com/emthornber/poc_node_sea#readme",
   "devDependencies": {
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
+    "esbuild": "^0.28.0",
     "mocha": "^11.3.0",
     "nyc": "^15.1.0",
     "rewire": "^6.0.0",
@@ -34,7 +35,6 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.3",
-    "mongoose": "^6.2.6",
     "nanoid": "^3.3.1"
   }
 }
